@@ -6,17 +6,48 @@ import Tantan from "../Assets/Tantan.png";
 import { useNavigate } from "react-router-dom";
 import PostCard from "../Components/Newsfeed/PostCard";
 import firebasePost from "../config/firebase-functionsPost";
+import { v4 as uuidv4 } from "uuid";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Modify import statement
+import { storage } from "../config/firebase";
 
 function InstagramHomePage() {
   const { createData: CreatePost, postData } = firebasePost();
   const [postCaption, setPostCaption] = useState("");
-
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const getUsername = localStorage.getItem("account.username");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (getUsername === null) navigate("/");
-  });
+  }, [getUsername, navigate]); // Add dependencies to useEffect
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+  };
+
+  const handleUpload = () => {
+    const randomFileName = uuidv4(); // Generate random file name
+    const storageRef = ref(storage, `images/${randomFileName}.png`); // Reference to storage location with random file name
+    const uploadTask = uploadBytesResumable(storageRef, image);
+
+    uploadTask.on(
+      "state_changed",
+      null,
+      (error) => {
+        console.error("Error uploading image: ", error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageUrl(downloadURL);
+          console.log(imageUrl);
+          // After image is uploaded, create post with image URL
+          CreatePost(getUsername, postCaption, downloadURL);
+        });
+      }
+    );
+  };
 
   return (
     <main className="max-w-screen-lg mx-auto px-4">
@@ -46,10 +77,35 @@ function InstagramHomePage() {
             onChange={(e) => setPostCaption(e.target.value)}
           ></textarea>
         </div>
-        <div className="flex justify-end mt-2">
+        <div className="flex justify-between items-center mt-2">
+          {/* Image Upload */}
+          <label htmlFor="imageUpload">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 cursor-pointer text-blue-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </label>
+          <input
+            type="file"
+            id="imageUpload"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+          {/* Post Button */}
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg focus:outline-none"
-            onClick={() => CreatePost(getUsername, postCaption)}
+            onClick={handleUpload}
           >
             Post
           </button>
@@ -58,9 +114,11 @@ function InstagramHomePage() {
       {postData.map((post) => {
         return (
           <PostCard
+            key={post.id}
             postID={post.id}
             username={post.username}
             caption={post.caption}
+            imgPath={post.imgPath}
             date={post.dateposted}
           />
         );

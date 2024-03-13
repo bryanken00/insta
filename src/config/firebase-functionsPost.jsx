@@ -21,10 +21,11 @@ const firebasePost = () => {
     readData();
   }, []);
 
-  const createData = async (username, caption) => {
+  const createData = async (username, caption, image) => {
     await addDoc(userCollectionRef, {
       username: username,
       caption: caption,
+      imgPath: image,
       dateposted: currentDate,
     });
     readData();

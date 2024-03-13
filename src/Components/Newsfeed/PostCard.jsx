@@ -1,6 +1,6 @@
 import React from "react";
 
-const PostCard = ({ postID, username, caption, date }) => {
+const PostCard = ({ postID, username, caption, imgPath, date }) => {
   const formattedDate = date
     ? new Date(date.seconds * 1000).toLocaleDateString()
     : "";
@@ -19,11 +19,9 @@ const PostCard = ({ postID, username, caption, date }) => {
           </div>
         </div>
         {/* Post image */}
-        <img
-          src="https://via.placeholder.com/200x150"
-          alt="Post"
-          className="w-full h-auto"
-        />
+        {imgPath && (
+          <img src={imgPath} alt="Uploaded" className="w-full h-auto" />
+        )}
         {/* Post actions */}
         <div className="flex justify-between p-4">
           <div className="flex space-x-4">
