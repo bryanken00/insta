@@ -47,6 +47,8 @@ function InstagramHomePage() {
         });
       }
     );
+    setImage("");
+    setPostCaption("");
   };
 
   return (

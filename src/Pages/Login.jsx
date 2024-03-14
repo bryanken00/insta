@@ -53,7 +53,7 @@ function InstagramLogin() {
                 type="text"
                 autoComplete="username"
                 required
-                className="input-field"
+                className="appearance-none rounded-full relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-lg mb-6"
                 placeholder="Email address"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -66,7 +66,7 @@ function InstagramLogin() {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="input-field"
+                className="appearance-none rounded-full relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-lg"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -85,25 +85,28 @@ function InstagramLogin() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="checkbox-field"
+                className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
-              <label htmlFor="remember-me" className="text-sm text-gray-700">
+              <label
+                htmlFor="remember-me"
+                className="ml-2 text-sm text-gray-700"
+              >
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
+              <a className="font-medium text-indigo-600 hover:text-indigo-500">
                 Forgot your password?
               </a>
             </div>
           </div>
 
           <div>
-            <button type="submit" className="submit-button">
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-lg font-semibold rounded-full text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
               Log in
             </button>
           </div>
